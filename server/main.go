@@ -1,11 +1,13 @@
 package main
 
 import (
-	proto_generate "github.com/grpc-boot/service/proto-generate"
-	"github.com/grpc-boot/service/service"
-	"google.golang.org/grpc"
 	"log"
 	"net"
+
+	"github.com/grpc-boot/service/proto/pb"
+	"github.com/grpc-boot/service/service"
+
+	"google.golang.org/grpc"
 )
 
 const (
@@ -18,7 +20,7 @@ func main() {
 		log.Fatalf("failed to listen： %v", err)
 	}
 	s := grpc.NewServer()
-	proto_generate.RegisterGreeterServer(s, &service.Server{})
+	pb.RegisterGreeterServer(s, &service.Server{})
 	err = s.Serve(lis)
 	if err != nil {
 		log.Println(err)

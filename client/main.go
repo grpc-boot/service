@@ -2,9 +2,11 @@ package main
 
 import (
 	"context"
-	proto_generate "github.com/grpc-boot/service/proto-generate"
-	"google.golang.org/grpc"
 	"log"
+
+	"github.com/grpc-boot/service/proto/pb"
+
+	"google.golang.org/grpc"
 )
 
 const (
@@ -19,8 +21,14 @@ func main() {
 	}
 
 	defer conn.Close()
-	c := proto_generate.NewGreeterClient(conn)
-	r, err := c.SayHello(context.Background(), &proto_generate.HelloRequest{Name: defaultName})
+	c := pb.NewGreeterClient(conn)
+	r, err := c.SayHello(context.Background(), &pb.HelloRequest{Name: defaultName})
+	if err != nil {
+		log.Fatalf("could not greet： %v", err)
+	}
+	log.Printf("Greeting： %s", r.Message)
+
+	r, err = c.SayHello(context.Background(), &pb.HelloRequest{Name: "request second"})
 	if err != nil {
 		log.Fatalf("could not greet： %v", err)
 	}
