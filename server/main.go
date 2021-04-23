@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/grpc-boot/service/conf"
 	"log"
 	"net"
 
@@ -15,6 +16,8 @@ const (
 )
 
 func main() {
+	conf.Init()
+
 	lis, err := net.Listen("tcp", port)
 	if err != nil {
 		log.Fatalf("failed to listen： %v", err)
