@@ -1,10 +1,10 @@
 package v1
 
 import (
+	"service/common/model"
 	"sync"
 
 	"service/infrastructure/utils"
-	"service/model"
 )
 
 var userPool = sync.Pool{

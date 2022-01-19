@@ -1,8 +1,8 @@
 package output
 
 import (
+	"service/common/model"
 	"service/infrastructure/utils"
-	"service/model"
 )
 
 type User struct {

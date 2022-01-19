@@ -1,10 +1,10 @@
 package domain
 
 import (
+	"service/common/model"
 	"service/domain/implement/v1"
 	"service/infrastructure/abstract"
 	"service/infrastructure/utils"
-	"service/model"
 )
 
 // V1User v1用户聚合实现
