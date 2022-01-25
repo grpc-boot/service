@@ -29,7 +29,7 @@ func GetConf() *Conf {
 // Init 初始化配置
 func Init(filename string) error {
 	var (
-		kind     = "yml"
+		kind     = ".yml"
 		position int
 	)
 
