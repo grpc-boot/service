@@ -1,21 +1,15 @@
 package conf
 
 import (
+	"errors"
 	"flag"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/grpc-boot/base"
 	_ "github.com/grpc-boot/betcd"
 	_ "github.com/grpc-boot/gateway"
-	"github.com/grpc-boot/gedis"
-	"github.com/grpc-boot/orm"
-	clientv3 "go.etcd.io/etcd/client/v3"
-)
-
-const (
-	ConfJson = `json`
-	ConfYaml = `yml`
 )
 
 const (
@@ -27,12 +21,48 @@ var (
 	conf Conf
 )
 
-// Conf 配置
-type Conf struct {
-	App   App                 `json:"app" yaml:"app"`
-	Db    orm.GroupOption     `json:"db" yaml:"db"`
-	Redis []gedis.GroupOption `json:"redis" yaml:"redis"`
-	Etcd  clientv3.Config     `json:"etcd" yaml:"etcd"`
+// GetConf 获取配置
+func GetConf() *Conf {
+	return &conf
+}
+
+// Init 初始化配置
+func Init(filename string) error {
+	var (
+		kind     = "yml"
+		position int
+	)
+
+	if filename != "" && filename[0] != '/' {
+		filename = filepath.Dir(os.Args[0]) + "/" + filename
+	}
+
+	// 解析文件扩展名
+	position = strings.LastIndexByte(filename, '.')
+	if position > 0 {
+		kind = filename[position:]
+	}
+
+	switch kind {
+	case ".yml", ".yaml":
+		return initYamlConf(filename)
+	case ".json":
+		return initJsonConf(filename)
+	}
+
+	return errors.New("仅支持扩展名为[.yml,.yaml,.json]的配置文件")
+}
+
+// InitWithFlag with flag初始化配置
+func InitWithFlag() error {
+	var (
+		filename string
+	)
+
+	flag.StringVar(&filename, "c", "", "配置文件路径，默认为conf/app.yml或conf/app.json")
+	flag.Parse()
+
+	return Init(filename)
 }
 
 func initJsonConf(filename string) error {
@@ -47,33 +77,4 @@ func initYamlConf(filename string) error {
 		filename = YamlConfig
 	}
 	return base.YamlDecodeFile(filename, &conf)
-}
-
-func Init(kind string, filename string) error {
-	if filename != "" && filename[0] != '/' {
-		filename = filepath.Dir(os.Args[0]) + "/" + filename
-	}
-
-	switch kind {
-	case ConfYaml:
-		return initYamlConf(filename)
-	}
-	return initJsonConf(filename)
-}
-
-func InitWithFlag() error {
-	var (
-		kind     string
-		filename string
-	)
-
-	flag.StringVar(&kind, "k", "yml", "配置文件类型，默认为yml")
-	flag.StringVar(&filename, "c", "", "配置文件路径，默认为conf/app.yml或conf/app.json")
-	flag.Parse()
-
-	return Init(kind, filename)
-}
-
-func GetConf() *Conf {
-	return &conf
 }
