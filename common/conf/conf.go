@@ -67,8 +67,8 @@ func InitWithFlag() error {
 		filename string
 	)
 
-	flag.StringVar(&kind, "k", "yml", "-k 配置文件类型，默认为yml")
-	flag.StringVar(&filename, "c", "", "-c 配置文件路径，默认为conf/app.yml或conf/app.json")
+	flag.StringVar(&kind, "k", "yml", "配置文件类型，默认为yml")
+	flag.StringVar(&filename, "c", "", "配置文件路径，默认为conf/app.yml或conf/app.json")
 	flag.Parse()
 
 	return Init(kind, filename)
