@@ -1,15 +1,14 @@
-package utils
+package components
 
-import "sync"
+import (
+	"sync"
 
-const (
-	ErrPhoneExists = 10001
-	ErrEmailExists = 10002
+	"service/common/define"
 )
 
 var errorMap = map[int32]string{
-	ErrPhoneExists: "手机号已存在",
-	ErrEmailExists: "邮箱已存在",
+	define.ErrPhoneExists: "手机号已存在",
+	define.ErrEmailExists: "邮箱已存在",
 }
 
 var errPool = sync.Pool{

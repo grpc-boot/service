@@ -1,8 +1,8 @@
 package output
 
 import (
+	"service/common/components"
 	"service/common/model"
-	"service/infrastructure/utils"
 )
 
 type User struct {
@@ -12,7 +12,7 @@ type User struct {
 	UpdatedAt int64  `json:"updated_at"`
 }
 
-func ConvertUser(user model.User, err *utils.Error) (u User, er *utils.Error) {
+func ConvertUser(user model.User, err *components.Error) (u User, er *components.Error) {
 	if err != nil {
 		return u, err
 	}

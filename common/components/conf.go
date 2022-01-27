@@ -1,4 +1,4 @@
-package conf
+package components
 
 import (
 	"errors"
@@ -7,27 +7,25 @@ import (
 	"path/filepath"
 	"strings"
 
+	"service/common/define"
+	"service/common/model"
+
 	"github.com/grpc-boot/base"
 	_ "github.com/grpc-boot/betcd"
 	_ "github.com/grpc-boot/gateway"
 )
 
-const (
-	JsonConfig = `conf/app.json`
-	YamlConfig = `conf/app.yml`
-)
-
 var (
-	conf Conf
+	conf model.Conf
 )
 
 // GetConf 获取配置
-func GetConf() *Conf {
+func GetConf() *model.Conf {
 	return &conf
 }
 
-// Init 初始化配置
-func Init(filename string) error {
+// InitConf 初始化配置
+func InitConf(filename string) error {
 	var (
 		kind     = ".yml"
 		rootPath = filepath.Dir(os.Args[0])
@@ -35,10 +33,10 @@ func Init(filename string) error {
 	)
 
 	if filename == "" {
-		confFile := rootPath + "/" + YamlConfig
+		confFile := rootPath + "/" + define.YamlConfig
 		if !base.FileExists(confFile) {
 			kind = ".json"
-			filename = rootPath + "/" + JsonConfig
+			filename = rootPath + "/" + define.JsonConfig
 		}
 	} else {
 		if filename[0] != '/' {
@@ -62,8 +60,8 @@ func Init(filename string) error {
 	return errors.New("仅支持扩展名为[.yml,.yaml,.json]的配置文件")
 }
 
-// InitWithFlag with flag初始化配置
-func InitWithFlag() error {
+// InitConfWithFlag with flag初始化配置
+func InitConfWithFlag() error {
 	var (
 		filename string
 	)
@@ -71,5 +69,5 @@ func InitWithFlag() error {
 	flag.StringVar(&filename, "c", "", "配置文件路径，默认为conf/app.yml或conf/app.json")
 	flag.Parse()
 
-	return Init(filename)
+	return InitConf(filename)
 }

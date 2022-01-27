@@ -1,10 +1,10 @@
 package domain
 
 import (
+	"service/common/abstract"
+	"service/common/components"
 	"service/common/model"
 	"service/domain/implement/v1"
-	"service/infrastructure/abstract"
-	"service/infrastructure/utils"
 )
 
 // V1User v1用户聚合实现
@@ -16,6 +16,6 @@ func V1User() User {
 type User interface {
 	abstract.PoolObject
 
-	RegisterPhone(phone string) (user model.User, err *utils.Error)
-	RegisterEmail(email string) (user model.User, err *utils.Error)
+	RegisterPhone(phone string) (user model.User, err *components.Error)
+	RegisterEmail(email string) (user model.User, err *components.Error)
 }

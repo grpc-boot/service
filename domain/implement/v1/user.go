@@ -1,10 +1,10 @@
 package v1
 
 import (
-	"service/common/model"
 	"sync"
 
-	"service/infrastructure/utils"
+	"service/common/components"
+	"service/common/model"
 )
 
 var userPool = sync.Pool{
@@ -21,11 +21,11 @@ func NewUser() *User {
 // User 用户聚合实现
 type User struct{}
 
-func (u *User) RegisterPhone(phone string) (user model.User, err *utils.Error) {
+func (u *User) RegisterPhone(phone string) (user model.User, err *components.Error) {
 	return
 }
 
-func (u *User) RegisterEmail(email string) (user model.User, err *utils.Error) {
+func (u *User) RegisterEmail(email string) (user model.User, err *components.Error) {
 	return
 }
 
