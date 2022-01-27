@@ -30,24 +30,33 @@ func GetConf() *Conf {
 func Init(filename string) error {
 	var (
 		kind     = ".yml"
+		rootPath = filepath.Dir(os.Args[0])
 		position int
 	)
 
-	if filename != "" && filename[0] != '/' {
-		filename = filepath.Dir(os.Args[0]) + "/" + filename
-	}
+	if filename == "" {
+		confFile := rootPath + "/" + YamlConfig
+		if !base.FileExists(confFile) {
+			kind = ".json"
+			filename = rootPath + "/" + JsonConfig
+		}
+	} else {
+		if filename[0] != '/' {
+			filename = rootPath + "/" + filename
+		}
 
-	// 解析文件扩展名
-	position = strings.LastIndexByte(filename, '.')
-	if position > 0 {
-		kind = filename[position:]
+		// 解析文件扩展名
+		position = strings.LastIndexByte(filename, '.')
+		if position > 0 {
+			kind = filename[position:]
+		}
 	}
 
 	switch kind {
 	case ".yml", ".yaml":
-		return initYamlConf(filename)
+		return base.YamlDecodeFile(filename, &conf)
 	case ".json":
-		return initJsonConf(filename)
+		return base.JsonDecodeFile(filename, &conf)
 	}
 
 	return errors.New("仅支持扩展名为[.yml,.yaml,.json]的配置文件")
@@ -63,18 +72,4 @@ func InitWithFlag() error {
 	flag.Parse()
 
 	return Init(filename)
-}
-
-func initJsonConf(filename string) error {
-	if filename == "" {
-		filename = JsonConfig
-	}
-	return base.JsonDecodeFile(filename, &conf)
-}
-
-func initYamlConf(filename string) error {
-	if filename == "" {
-		filename = YamlConfig
-	}
-	return base.YamlDecodeFile(filename, &conf)
 }

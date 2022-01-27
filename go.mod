@@ -4,7 +4,7 @@ go 1.16
 
 require (
 	github.com/gin-gonic/gin v1.7.7
-	github.com/grpc-boot/base v1.0.20
+	github.com/grpc-boot/base v1.0.22
 	github.com/grpc-boot/betcd v0.0.0-20220114060045-aaa8b0110ff0
 	github.com/grpc-boot/gateway v1.0.0
 	github.com/grpc-boot/gedis v1.0.1

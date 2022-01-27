@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# sh ./scripts/install.sh gin test
 app_path=$(dirname $(cd $(dirname $0); pwd))
 
 case "$1" in
