@@ -1,0 +1,3 @@
+app:
+  name: 'gin-boot'
+  port: 8080
