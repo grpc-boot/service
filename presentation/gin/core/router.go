@@ -18,5 +18,6 @@ func Route() *gin.Engine {
 
 func bind(router *gin.Engine) {
 	router.GET("/", v1.Index)
-	router.GET("/index", v1.Index)
+	router.GET("/conf", v1.Conf)
+	router.GET("/service", v1.Service)
 }

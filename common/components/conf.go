@@ -28,19 +28,21 @@ func GetConf() *model.Conf {
 func InitConf(filename string) error {
 	var (
 		kind     = ".yml"
-		rootPath = filepath.Dir(os.Args[0])
+		rootPath = filepath.Dir(os.Args[0]) + "/"
 		position int
 	)
 
 	if filename == "" {
-		confFile := rootPath + "/" + define.YamlConfig
+		confFile := rootPath + define.YamlConfig
 		if !base.FileExists(confFile) {
 			kind = ".json"
-			filename = rootPath + "/" + define.JsonConfig
+			filename = rootPath + define.JsonConfig
+		} else {
+			filename = confFile
 		}
 	} else {
 		if filename[0] != '/' {
-			filename = rootPath + "/" + filename
+			filename = rootPath + filename
 		}
 
 		// 解析文件扩展名

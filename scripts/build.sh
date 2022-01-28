@@ -18,7 +18,7 @@ grpc() {
   $go build -o $"${app_path}/${app_name}-grpc"
 }
 
-$go mod tidy
+cd $app_path && $go mod tidy
 
 case "$1" in
 gin)

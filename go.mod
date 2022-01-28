@@ -10,6 +10,7 @@ require (
 	github.com/grpc-boot/gedis v1.0.1
 	github.com/grpc-boot/orm v1.0.1
 	go.etcd.io/etcd/client/v3 v3.5.1
+	go.uber.org/zap v1.20.0
 )
 
 replace google.golang.org/grpc => github.com/grpc/grpc-go v1.37.0

@@ -4,11 +4,14 @@ import (
 	"os"
 	"time"
 
+	"service/common/define"
+
+	"github.com/grpc-boot/base"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 )
 
-func InitLogger() (core zapcore.Core) {
+func InitLogger() {
 	encoder := zapcore.NewJSONEncoder(zapcore.EncoderConfig{
 		MessageKey: "Message",
 		LevelKey:   "Level",
@@ -21,10 +24,10 @@ func InitLogger() (core zapcore.Core) {
 		EncodeCaller: zapcore.ShortCallerEncoder,
 	})
 
-	infoLog, _ := os.Create(conf.Log.InfoPath)
-	errorLog, _ := os.Create(conf.Log.ErrorPath)
+	infoLog, _ := os.OpenFile(conf.Log.InfoPath, define.LoggerFlag, define.LoggerMode)
+	errorLog, _ := os.OpenFile(conf.Log.ErrorPath, define.LoggerFlag, define.LoggerMode)
 
-	return zapcore.NewTee(
+	core := zapcore.NewTee(
 		zapcore.NewCore(encoder, infoLog, zap.LevelEnablerFunc(func(z zapcore.Level) bool {
 			return z >= zapcore.Level(conf.Log.Level) && z <= zap.WarnLevel
 		})),
@@ -32,4 +35,6 @@ func InitLogger() (core zapcore.Core) {
 			return z >= zap.ErrorLevel
 		})),
 	)
+
+	base.InitZapWithCore(core)
 }
