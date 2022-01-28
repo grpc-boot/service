@@ -5,9 +5,9 @@ import (
 	"flag"
 	"os"
 	"path/filepath"
+	"service/common/define/constant"
 	"strings"
 
-	"service/common/define"
 	"service/common/model"
 
 	"github.com/grpc-boot/base"
@@ -33,10 +33,10 @@ func InitConf(filename string) error {
 	)
 
 	if filename == "" {
-		confFile := rootPath + define.YamlConfig
+		confFile := rootPath + constant.YamlConfig
 		if !base.FileExists(confFile) {
 			kind = ".json"
-			filename = rootPath + define.JsonConfig
+			filename = rootPath + constant.JsonConfig
 		} else {
 			filename = confFile
 		}

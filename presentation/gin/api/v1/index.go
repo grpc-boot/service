@@ -3,13 +3,12 @@ package v1
 import (
 	"context"
 	"net/http"
-
-	"service/common/components"
-	"service/common/define"
+	"service/common/define/constant"
 
 	"github.com/gin-gonic/gin"
 	"github.com/grpc-boot/base"
 	"go.uber.org/zap"
+	"service/common/components"
 )
 
 func Index(ctx *gin.Context) {
@@ -21,7 +20,7 @@ func Index(ctx *gin.Context) {
 }
 
 func Conf(ctx *gin.Context) {
-	c, ok := components.GetEtcdConf(define.EtcdConf)
+	c, ok := components.GetEtcdConf(constant.EtcdConf)
 	if ok {
 		v, exists := c.Get(`browser/conf/app/limit`)
 		ctx.JSON(http.StatusOK, map[string]interface{}{
@@ -39,7 +38,7 @@ func Conf(ctx *gin.Context) {
 }
 
 func Service(ctx *gin.Context) {
-	n, ok := components.GetEtcdNaming(define.EtcdNaming)
+	n, ok := components.GetEtcdNaming(constant.EtcdNaming)
 	if ok {
 		v, err := n.List(context.TODO())
 		if err == nil {

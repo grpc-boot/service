@@ -2,9 +2,8 @@ package components
 
 import (
 	"os"
+	"service/common/define/constant"
 	"time"
-
-	"service/common/define"
 
 	"github.com/grpc-boot/base"
 	"go.uber.org/zap"
@@ -24,8 +23,8 @@ func InitLogger() {
 		EncodeCaller: zapcore.ShortCallerEncoder,
 	})
 
-	infoLog, _ := os.OpenFile(conf.Log.InfoPath, define.LoggerFlag, define.LoggerMode)
-	errorLog, _ := os.OpenFile(conf.Log.ErrorPath, define.LoggerFlag, define.LoggerMode)
+	infoLog, _ := os.OpenFile(conf.Log.InfoPath, constant.LoggerFlag, constant.LoggerMode)
+	errorLog, _ := os.OpenFile(conf.Log.ErrorPath, constant.LoggerFlag, constant.LoggerMode)
 
 	core := zapcore.NewTee(
 		zapcore.NewCore(encoder, infoLog, zap.LevelEnablerFunc(func(z zapcore.Level) bool {

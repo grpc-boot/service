@@ -2,7 +2,7 @@ package core
 
 import (
 	"service/common/components"
-	"service/common/define"
+	"service/common/define/constant"
 
 	"github.com/grpc-boot/base"
 	clientv3 "go.etcd.io/etcd/client/v3"
@@ -18,29 +18,29 @@ func Init() {
 	components.InitLogger()
 
 	//加载数据库
-	err = components.SetDb(define.Db, &conf.Db)
+	err = components.SetDb(constant.Db, &conf.Db)
 	if err != nil {
-		base.RedFatal("load %s err:%s", define.Db, err.Error())
+		base.RedFatal("load %s err:%s", constant.Db, err.Error())
 	}
 
 	//加载Etcd
-	err = components.SetEtcd(define.Etcd, conf.Etcd.ToConfig())
+	err = components.SetEtcd(constant.Etcd, conf.Etcd.ToConfig())
 	if err != nil {
-		base.RedFatal("load %s err:%s", define.Etcd, err.Error())
+		base.RedFatal("load %s err:%s", constant.Etcd, err.Error())
 	}
 
 	//加载etcd conf
-	err = components.SetEtcdConf(define.EtcdConf, conf.EtcdConf, clientv3.WithPrefix())
+	err = components.SetEtcdConf(constant.EtcdConf, conf.EtcdConf, clientv3.WithPrefix())
 	if err != nil {
-		base.RedFatal("load %s err:%s", define.EtcdConf, err.Error())
+		base.RedFatal("load %s err:%s", constant.EtcdConf, err.Error())
 	}
 
 	//加载etcd naming
-	err = components.SetEtcdNaming(define.EtcdNaming, conf.EtcdNaming)
+	err = components.SetEtcdNaming(constant.EtcdNaming, conf.EtcdNaming)
 	if err != nil {
-		base.RedFatal("load %s err:%s", define.EtcdNaming, err.Error())
+		base.RedFatal("load %s err:%s", constant.EtcdNaming, err.Error())
 	}
 
 	//加载redis
-	components.SetRedis(define.Redis, &conf.Redis)
+	components.SetRedis(constant.Redis, &conf.Redis)
 }

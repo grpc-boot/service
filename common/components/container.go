@@ -3,7 +3,7 @@ package components
 import (
 	"errors"
 	"fmt"
-	"sync/atomic"
+	"sync"
 
 	"service/common/model"
 
@@ -13,40 +13,78 @@ import (
 	clientv3 "go.etcd.io/etcd/client/v3"
 )
 
-var (
-	container atomic.Value //*map[string]interface{}
-)
+// 存储全局对象，适用于：极少量的insert，大量的query
+// 注意：1.禁止存储大量用户或者连接数据 2.防止Key冲突
+var container sync.Map
 
-func setContainer(name string, val interface{}) {
-	newContainer := make(map[string]interface{})
-	oldContainer, ok := container.Load().(*map[string]interface{})
-	if ok && len(*oldContainer) > 0 {
-		for n, v := range *oldContainer {
-			newContainer[n] = v
-		}
-	}
-	newContainer[name] = val
-	container.Store(&newContainer)
+// SetFloat64 存储float64值
+func SetFloat64(name string, val float64) {
+	container.Store(name, val)
 }
 
-func getContainer(name string) (val interface{}, exists bool) {
-	c, ok := container.Load().(*map[string]interface{})
-	if !ok {
-		return nil, ok
+// GetFloat64 获取float64值
+func GetFloat64(name string) (val float64, ok bool) {
+	value, exists := container.Load(name)
+	if !exists {
+		return
 	}
+	val, ok = value.(float64)
+	return
+}
 
-	val, exists = (*c)[name]
+// SetInt64 存储int64值
+func SetInt64(name string, val int64) {
+	container.Store(name, val)
+}
+
+// GetInt64 获取int64值
+func GetInt64(name string) (val int64, ok bool) {
+	value, exists := container.Load(name)
+	if !exists {
+		return
+	}
+	val, ok = value.(int64)
+	return
+}
+
+// SetString 存储string值
+func SetString(name, val string) {
+	container.Store(name, val)
+}
+
+// SetBytes 存储[]byte
+func SetBytes(name string, val []byte) {
+	container.Store(name, val)
+}
+
+// GetBytes 获取[]byte
+func GetBytes(name string) (val []byte, ok bool) {
+	value, exists := container.Load(name)
+	if !exists {
+		return
+	}
+	val, ok = value.([]byte)
+	return
+}
+
+// GetString 获取
+func GetString(name string) (val string, ok bool) {
+	value, exists := container.Load(name)
+	if !exists {
+		return
+	}
+	val, ok = value.(string)
 	return
 }
 
 // SetRedis 加载Redis连接池
 func SetRedis(name string, option *gedis.Option) {
-	setContainer(name, gedis.NewPool(*option))
+	container.Store(name, gedis.NewPool(*option))
 }
 
 // GetRedis 获取Redis连接池
 func GetRedis(name string) (red gedis.Pool, ok bool) {
-	val, exists := getContainer(name)
+	val, exists := container.Load(name)
 	if !exists {
 		return nil, exists
 	}
@@ -62,13 +100,13 @@ func SetRedisGroup(name string, options ...gedis.GroupOption) error {
 		return err
 	}
 
-	setContainer(name, group)
+	container.Store(name, group)
 	return nil
 }
 
 // GetRedisGroup 获取RedisGroup
 func GetRedisGroup(name string) (group gedis.Group, ok bool) {
-	val, exists := getContainer(name)
+	val, exists := container.Load(name)
 	if !exists {
 		return nil, exists
 	}
@@ -84,13 +122,13 @@ func SetDb(name string, option *orm.GroupOption) error {
 		return err
 	}
 
-	setContainer(name, group)
+	container.Store(name, group)
 	return nil
 }
 
 // GetDb 获取数据库
 func GetDb(name string) (red orm.Group, ok bool) {
-	val, exists := getContainer(name)
+	val, exists := container.Load(name)
 	if !exists {
 		return nil, exists
 	}
@@ -106,13 +144,13 @@ func SetEtcd(name string, conf clientv3.Config) error {
 		return err
 	}
 
-	setContainer(name, client)
+	container.Store(name, client)
 	return nil
 }
 
 // GetEtcd 获取
 func GetEtcd(name string) (client *clientv3.Client, ok bool) {
-	val, exists := getContainer(name)
+	val, exists := container.Load(name)
 	if !exists {
 		return nil, exists
 	}
@@ -133,13 +171,13 @@ func SetEtcdConf(name string, conf model.EtcdConf, options ...clientv3.OpOption)
 		return err
 	}
 
-	setContainer(name, c)
+	container.Store(name, c)
 	return nil
 }
 
 // GetEtcdConf 获取EtcdConf
 func GetEtcdConf(name string) (conf betcd.Config, ok bool) {
-	val, exists := getContainer(name)
+	val, exists := container.Load(name)
 	if !exists {
 		return nil, exists
 	}
@@ -160,13 +198,13 @@ func SetEtcdNaming(name string, conf model.EtcdNaming) error {
 		return err
 	}
 
-	setContainer(name, naming)
+	container.Store(name, naming)
 	return nil
 }
 
 // GetEtcdNaming 获取etcd naming
 func GetEtcdNaming(name string) (naming betcd.Naming, ok bool) {
-	val, exists := getContainer(name)
+	val, exists := container.Load(name)
 	if !exists {
 		return nil, exists
 	}

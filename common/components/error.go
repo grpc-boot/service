@@ -1,14 +1,13 @@
 package components
 
 import (
+	"service/common/define/constant"
 	"sync"
-
-	"service/common/define"
 )
 
 var errorMap = map[int32]string{
-	define.ErrPhoneExists: "手机号已存在",
-	define.ErrEmailExists: "邮箱已存在",
+	constant.ErrPhoneExists: "手机号已存在",
+	constant.ErrEmailExists: "邮箱已存在",
 }
 
 var errPool = sync.Pool{
