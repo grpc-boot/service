@@ -1,11 +1,11 @@
 package core
 
 import (
-	clientv3 "go.etcd.io/etcd/client/v3"
 	"service/common/components"
 	"service/common/define"
 
 	"github.com/grpc-boot/base"
+	clientv3 "go.etcd.io/etcd/client/v3"
 )
 
 func Init() {
