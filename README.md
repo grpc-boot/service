@@ -59,6 +59,13 @@ CREATE TABLE `user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 ```
 
+### 编译安装运行
+
+```shell
+./scripts/install.sh gin test
+./service-gin 
+```
+
 > 1.下载protoc
 
 [https://github.com/protocolbuffers/protobuf/releases/](https://github.com/protocolbuffers/protobuf/releases/)
