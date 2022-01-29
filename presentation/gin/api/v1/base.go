@@ -18,7 +18,7 @@ func gateway(ctx *gin.Context, obj model.Response) {
 	if ok {
 		at, _ := ctx.Get(constant.CtxAccessTime)
 		path, _ := ctx.Get(constant.CtxRequestPath)
-		_, _, _, err := gw.Out(at.(time.Time), path.(string), obj.Code)
+		_, _, _, err := gw.Out(at.(time.Time), path.(string), int(obj.Code))
 		if err != nil {
 			base.ZapError("gateway out error",
 				zap.String(constant.ZapError, err.Error()),

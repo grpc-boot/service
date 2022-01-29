@@ -1,6 +1,7 @@
 package v1
 
 import (
+	"service/common/define/constant"
 	"service/common/model"
 
 	"github.com/gin-gonic/gin"
@@ -9,8 +10,8 @@ import (
 
 func Index(ctx *gin.Context) {
 	json(ctx, model.Response{
-		Code: 20000,
-		Msg:  "ok",
+		Code: constant.Success,
+		Msg:  "Hello World!",
 		Data: base.SetValue,
 	})
 }

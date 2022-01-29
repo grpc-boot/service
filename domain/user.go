@@ -3,7 +3,7 @@ package domain
 import (
 	"service/common/abstract"
 	"service/common/components"
-	"service/common/model"
+	"service/dal/entity"
 	"service/domain/implement/v1"
 )
 
@@ -16,6 +16,6 @@ func V1User() User {
 type User interface {
 	abstract.PoolObject
 
-	RegisterPhone(phone string) (user model.User, err *components.Error)
-	RegisterEmail(email string) (user model.User, err *components.Error)
+	RegisterPhone(phone string) (user entity.User, err *components.Error)
+	RegisterEmail(email string) (user entity.User, err *components.Error)
 }

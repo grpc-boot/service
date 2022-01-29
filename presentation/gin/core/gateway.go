@@ -6,7 +6,6 @@ import (
 
 	"service/common/components"
 	"service/common/define/constant"
-	"service/common/model"
 
 	"github.com/gin-gonic/gin"
 	"github.com/grpc-boot/base"
@@ -39,20 +38,15 @@ func WithGateway() gin.HandlerFunc {
 			return
 		}
 
-		response := model.Response{
-			Code: http.StatusRequestTimeout,
-			Msg:  "service is busy",
-			Data: base.SetValue,
-		}
-
+		code := constant.ErrLimit
 		if status == gateway.StatusNo {
-			response.Code = http.StatusInternalServerError
-			response.Msg = "service not available"
+			code = constant.ErrNotAvailable
+			ctx.JSON(http.StatusOK, components.Code2Response(constant.ErrNotAvailable))
+		} else {
+			ctx.JSON(http.StatusOK, components.Code2Response(constant.ErrLimit))
 		}
 
-		ctx.JSON(http.StatusOK, response)
-
-		_, _, _, err := gw.Out(accessTime, path, response.Code)
+		_, _, _, err := gw.Out(accessTime, path, code)
 		if err != nil {
 			base.ZapError("gateway out error",
 				zap.String(constant.ZapError, err.Error()),

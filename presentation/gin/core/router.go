@@ -25,4 +25,5 @@ func bind(router *gin.Engine) {
 	//-----------------v1----------------
 	v1Group := router.Group("v1")
 	v1Group.GET("/gw", v1.Gw)
+	v1Group.GET("/reg", v1.Register)
 }
