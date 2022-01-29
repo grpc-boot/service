@@ -13,6 +13,7 @@ const (
 // zap日志字段
 const (
 	ZapError    = `Error`
+	ZapInfo     = `Info`
 	ZapIp       = `Ip`
 	ZapTraceId  = `TraceId`
 	ZapEndpoint = `Endpoint`

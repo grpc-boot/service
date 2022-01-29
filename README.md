@@ -27,13 +27,13 @@
 
 ```sql
 CREATE TABLE `gateway` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `name` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT '' COMMENT '名称',
-  `path` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT '' COMMENT '路径',
-  `second_limit` int unsigned DEFAULT '5000' COMMENT '每秒请求数',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `path` (`path`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
+   `name` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT '' COMMENT '名称',
+   `path` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT '' COMMENT '路径',
+   `second_limit` int DEFAULT '5000' COMMENT '每秒请求数',
+   PRIMARY KEY (`id`),
+   UNIQUE KEY `path` (`path`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4;
 ```
 
 ```sql

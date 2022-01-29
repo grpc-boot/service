@@ -14,6 +14,7 @@ import (
 	"service/presentation/gin/core"
 
 	"github.com/grpc-boot/base"
+	clientv3 "go.etcd.io/etcd/client/v3"
 	"go.etcd.io/etcd/client/v3/naming/endpoints"
 	"go.uber.org/zap"
 )
@@ -66,9 +67,24 @@ func main() {
 	//注册服务
 	time.AfterFunc(time.Second, func() {
 		if naming, ok := components.GetEtcdNaming(constant.ContEtcdNaming); ok {
-			if _, err = naming.Register(60, endpoint); err != nil {
+			var liveCh <-chan *clientv3.LeaseKeepAliveResponse
+			liveCh, err = naming.Register(60, endpoint)
+			if err != nil {
 				base.ZapFatal("register service error", zap.String(constant.ZapError, err.Error()))
 			}
+
+			go func() {
+				for {
+					res, getOk := <-liveCh
+					if !getOk {
+						break
+					}
+
+					base.ZapInfo("etcd keepAlive info",
+						zap.String(constant.ZapInfo, res.String()),
+					)
+				}
+			}()
 		}
 	})
 
