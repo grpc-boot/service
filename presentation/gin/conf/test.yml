@@ -1,6 +1,7 @@
 app:
   name: 'gin-boot'
   addr: ':8080'
+  autoRegis: true
 
 log:
   level: -1

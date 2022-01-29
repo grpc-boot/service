@@ -14,7 +14,6 @@ import (
 	"service/presentation/gin/core"
 
 	"github.com/grpc-boot/base"
-	clientv3 "go.etcd.io/etcd/client/v3"
 	"go.etcd.io/etcd/client/v3/naming/endpoints"
 	"go.uber.org/zap"
 )
@@ -36,27 +35,36 @@ func main() {
 		base.ZapFatal("load config error", zap.String(constant.ZapError, err.Error()))
 	}
 
-	//初始化endpoint
-	endpoint, err = components.EndpointWithLocalIp(components.GetConf(), map[string]interface{}{
-		"startAt": startAt.Unix(),
-	})
-	if err != nil {
-		base.ZapFatal("load endpoint error", zap.String(constant.ZapError, err.Error()))
+	//获取配置文件
+	conf := components.GetConf()
+
+	// 开启了服务自动注册
+	if conf.App.AutoRegis {
+		//初始化endpoint
+		endpoint, err = components.EndpointWithLocalIp(conf.App.Addr, map[string]interface{}{
+			"startAt": startAt.Unix(),
+		})
+		if err != nil {
+			base.ZapFatal("load endpoint error", zap.String(constant.ZapError, err.Error()))
+		}
 	}
 
 	//应用初始化
 	core.Init()
+
 	//加载路由接收请求
 	r := core.Route()
 
+	//初始化Server
 	srv := http.Server{
-		Addr:    components.GetConf().App.Addr,
+		Addr:    conf.App.Addr,
 		Handler: r,
 	}
 
 	// 注册停止回调
 	srv.RegisterOnShutdown(shutdown)
 
+	// 启动服务
 	go func() {
 		err = srv.ListenAndServe()
 		if err != nil && err != http.ErrServerClosed {
@@ -64,29 +72,14 @@ func main() {
 		}
 	}()
 
-	//注册服务
-	time.AfterFunc(time.Second, func() {
-		if naming, ok := components.GetEtcdNaming(constant.ContEtcdNaming); ok {
-			var liveCh <-chan *clientv3.LeaseKeepAliveResponse
-			liveCh, err = naming.Register(60, endpoint)
-			if err != nil {
-				base.ZapFatal("register service error", zap.String(constant.ZapError, err.Error()))
+	if endpoint.Addr != "" {
+		//注册服务
+		time.AfterFunc(time.Second, func() {
+			if err = components.Register(endpoint); err != nil {
+				base.ZapFatal("register server failed")
 			}
-
-			go func() {
-				for {
-					res, getOk := <-liveCh
-					if !getOk {
-						break
-					}
-
-					base.ZapInfo("etcd keepAlive info",
-						zap.String(constant.ZapInfo, res.String()),
-					)
-				}
-			}()
-		}
-	})
+		})
+	}
 
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
@@ -100,13 +93,8 @@ func main() {
 }
 
 func shutdown() {
-	base.ZapInfo("begin remove service", zap.String(constant.ZapEndpoint, endpoint.Addr))
-	if naming, ok := components.GetEtcdNaming(constant.ContEtcdNaming); ok {
-		if err := naming.Del(endpoint); err != nil {
-			base.ZapError("remove service error",
-				zap.String(constant.ZapEndpoint, endpoint.Addr),
-				zap.String(constant.ZapError, err.Error()),
-			)
-		}
+	if endpoint.Addr != "" {
+		//注销服务
+		_ = components.DeRegister(endpoint)
 	}
 }

@@ -2,8 +2,9 @@ package components
 
 import (
 	"os"
-	"service/common/define/constant"
 	"time"
+
+	"service/common/define/constant"
 
 	"github.com/grpc-boot/base"
 	"go.uber.org/zap"
