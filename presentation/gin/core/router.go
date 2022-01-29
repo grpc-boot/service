@@ -17,7 +17,12 @@ func Route() *gin.Engine {
 }
 
 func bind(router *gin.Engine) {
+	// 加载网关
+	router.Use(WithGateway())
+
 	router.GET("/", v1.Index)
-	router.GET("/conf", v1.Conf)
-	router.GET("/service", v1.Service)
+
+	//-----------------v1----------------
+	v1Group := router.Group("v1")
+	v1Group.GET("/gw", v1.Gw)
 }

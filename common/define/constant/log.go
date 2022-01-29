@@ -2,6 +2,8 @@ package constant
 
 import "os"
 
+// logger 相关
+
 // 日志
 const (
 	LoggerFlag = os.O_RDWR | os.O_CREATE | os.O_APPEND
@@ -10,8 +12,8 @@ const (
 
 // zap日志字段
 const (
-	FieldError    = `Error`
-	FieldIp       = `Ip`
-	FieldTraceId  = `TraceId`
-	FieldEndpoint = `Endpoint`
+	ZapError    = `Error`
+	ZapIp       = `Ip`
+	ZapTraceId  = `TraceId`
+	ZapEndpoint = `Endpoint`
 )

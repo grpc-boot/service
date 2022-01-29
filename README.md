@@ -23,6 +23,40 @@
 - scripts                   发布脚本(编译、安装)
 ```
 
+### 示例表
+
+```sql
+CREATE TABLE `gateway` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `name` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT '' COMMENT '名称',
+  `path` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT '' COMMENT '路径',
+  `second_limit` int unsigned DEFAULT '5000' COMMENT '每秒请求数',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `path` (`path`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+```
+
+```sql
+CREATE TABLE `user` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `nickname` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '昵称',
+  `passwd` char(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '登录密码',
+  `phone` bigint unsigned DEFAULT NULL COMMENT '手机号',
+  `email` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT '' COMMENT '邮箱',
+  `last_login_at` bigint DEFAULT NULL COMMENT '上次登录时间',
+  `wx_uuid` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '微信uuid',
+  `wx_pub_openid` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '微信公众号openid',
+  `wx_sapp_openid` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '微信小程序openid',
+  `created_at` bigint unsigned NOT NULL COMMENT '创建时间',
+  `updated_at` bigint unsigned NOT NULL DEFAULT '0' COMMENT '更新时间',
+  `is_on` tinyint unsigned NOT NULL DEFAULT '1' COMMENT '是否启用',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `phone` (`phone`),
+  UNIQUE KEY `wx_uuid` (`wx_uuid`),
+  UNIQUE KEY `wx_pub_openid` (`wx_pub_openid`),
+  UNIQUE KEY `wx_sapp_openid` (`wx_sapp_openid`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+```
 
 > 1.下载protoc
 

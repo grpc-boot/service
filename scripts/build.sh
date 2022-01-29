@@ -5,7 +5,7 @@ app_path=$(dirname $(cd $(dirname $0); pwd))
 go=$GOROOT/bin/go
 gin() {
   cd $app_path/presentation/gin
-  $go build -o $"${app_path}/${app_name}-gin"
+  $go build -o $"${app_path}/${app_name}-gin" -tags=jsoniter
 }
 
 fasthttp() {

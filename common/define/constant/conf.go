@@ -1,7 +1,9 @@
 package constant
 
+// conf相关
+
 // 默认配置文件
 const (
-	JsonConfig = `conf/app.json`
-	YamlConfig = `conf/app.yml`
+	ConfJson   = `conf/app.json`
+	ConfigYaml = `conf/app.yml`
 )

@@ -4,10 +4,12 @@ import (
 	"errors"
 	"fmt"
 	"sync"
+	"time"
 
 	"service/common/model"
 
 	"github.com/grpc-boot/betcd"
+	"github.com/grpc-boot/gateway"
 	"github.com/grpc-boot/gedis"
 	"github.com/grpc-boot/orm"
 	clientv3 "go.etcd.io/etcd/client/v3"
@@ -16,6 +18,16 @@ import (
 // 存储全局对象，适用于：极少量的insert，大量的query
 // 注意：1.禁止存储大量用户或者连接数据 2.防止Key冲突
 var container sync.Map
+
+// GetAny 获取any
+func GetAny(name string) (val interface{}, exists bool) {
+	return container.Load(name)
+}
+
+// SetAny 存储any
+func SetAny(name string, val interface{}) {
+	container.Store(name, val)
+}
 
 // SetFloat64 存储float64值
 func SetFloat64(name string, val float64) {
@@ -127,13 +139,13 @@ func SetDb(name string, option *orm.GroupOption) error {
 }
 
 // GetDb 获取数据库
-func GetDb(name string) (red orm.Group, ok bool) {
+func GetDb(name string) (db orm.Group, ok bool) {
 	val, exists := container.Load(name)
 	if !exists {
 		return nil, exists
 	}
 
-	red, ok = val.(orm.Group)
+	db, ok = val.(orm.Group)
 	return
 }
 
@@ -210,5 +222,23 @@ func GetEtcdNaming(name string) (naming betcd.Naming, ok bool) {
 	}
 
 	naming, ok = val.(betcd.Naming)
+	return
+}
+
+// SetGateway 存储网关
+func SetGateway(name string, duration time.Duration, optionsFunc gateway.OptionsFunc) {
+	gw := gateway.NewGateway(duration, optionsFunc)
+	container.Store(name, gw)
+}
+
+// GetGateway 获取网关
+func GetGateway(name string) (gw gateway.Gateway, ok bool) {
+	val, exists := container.Load(name)
+	if !exists {
+		return
+	}
+
+	gw, ok = val.(gateway.Gateway)
+
 	return
 }

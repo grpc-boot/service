@@ -1,17 +1,20 @@
 package constant
 
+// container相关
+
 // 容器内置配置
 const (
-	Db         = `db`
-	Redis      = `redis`
-	Etcd       = `etcd`
-	EtcdConf   = `etcdConf`
-	EtcdNaming = `etcdNaming`
+	ContDb         = `db`
+	ContRedis      = `redis`
+	ContEtcd       = `etcd`
+	ContEtcdConf   = `etcdConf`
+	ContEtcdNaming = `etcdNaming`
+	ContGateway    = `gateway`
 )
 
 // 容器用户自定义配置
 const (
-	StartAt   = `start-at`
-	UserDb    = `user-db`
-	UserRedis = `user-redis`
+	ContStartAt   = `start-at`
+	ContUserDb    = `user-db`
+	ContUserRedis = `user-redis`
 )

@@ -24,7 +24,7 @@ var (
 )
 
 func init() {
-	components.SetInt64(constant.StartAt, startAt.Unix())
+	components.SetInt64(constant.ContStartAt, startAt.Unix())
 	rand.Seed(startAt.UnixNano())
 }
 
@@ -32,7 +32,7 @@ func main() {
 	//初始化配置文件
 	err := components.InitConfWithFlag()
 	if err != nil {
-		base.ZapFatal("load config error", zap.String(constant.FieldError, err.Error()))
+		base.ZapFatal("load config error", zap.String(constant.ZapError, err.Error()))
 	}
 
 	//初始化endpoint
@@ -40,7 +40,7 @@ func main() {
 		"startAt": startAt.Unix(),
 	})
 	if err != nil {
-		base.ZapFatal("load endpoint error", zap.String(constant.FieldError, err.Error()))
+		base.ZapFatal("load endpoint error", zap.String(constant.ZapError, err.Error()))
 	}
 
 	//应用初始化
@@ -59,15 +59,15 @@ func main() {
 	go func() {
 		err = srv.ListenAndServe()
 		if err != nil && err != http.ErrServerClosed {
-			base.ZapFatal("start server error", zap.String(constant.FieldError, err.Error()))
+			base.ZapFatal("start server error", zap.String(constant.ZapError, err.Error()))
 		}
 	}()
 
 	//注册服务
 	time.AfterFunc(time.Second, func() {
-		if naming, ok := components.GetEtcdNaming(constant.EtcdNaming); ok {
-			if _, err = naming.Register(10, endpoint); err != nil {
-				base.ZapFatal("register service error", zap.String(constant.FieldError, err.Error()))
+		if naming, ok := components.GetEtcdNaming(constant.ContEtcdNaming); ok {
+			if _, err = naming.Register(60, endpoint); err != nil {
+				base.ZapFatal("register service error", zap.String(constant.ZapError, err.Error()))
 			}
 		}
 	})
@@ -79,17 +79,17 @@ func main() {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
 	defer cancel()
 	if err = srv.Shutdown(ctx); err != nil {
-		base.ZapFatal("stop server error", zap.String(constant.FieldError, err.Error()))
+		base.ZapFatal("stop server error", zap.String(constant.ZapError, err.Error()))
 	}
 }
 
 func shutdown() {
-	base.ZapInfo("begin remove service", zap.String(constant.FieldEndpoint, endpoint.Addr))
-	if naming, ok := components.GetEtcdNaming(constant.EtcdNaming); ok {
+	base.ZapInfo("begin remove service", zap.String(constant.ZapEndpoint, endpoint.Addr))
+	if naming, ok := components.GetEtcdNaming(constant.ContEtcdNaming); ok {
 		if err := naming.Del(endpoint); err != nil {
 			base.ZapError("remove service error",
-				zap.String(constant.FieldEndpoint, endpoint.Addr),
-				zap.String(constant.FieldError, err.Error()),
+				zap.String(constant.ZapEndpoint, endpoint.Addr),
+				zap.String(constant.ZapError, err.Error()),
 			)
 		}
 	}
