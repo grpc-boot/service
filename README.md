@@ -26,6 +26,8 @@
 
 ### 示例表
 
+> 网关表
+
 ```sql
 CREATE TABLE `gateway` (
    `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
@@ -36,6 +38,16 @@ CREATE TABLE `gateway` (
    UNIQUE KEY `path` (`path`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4;
 ```
+
+> 网关数据
+
+```sql
+INSERT INTO `gateway` VALUES (1, '获取网关信息', '/v1/gw', 5000);
+INSERT INTO `gateway` VALUES (2, '首页', '/', 1);
+INSERT INTO `gateway` VALUES (3, '注册', '/v1/reg', -1);
+```
+
+> 用户表
 
 ```sql
 CREATE TABLE `user` (

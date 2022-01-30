@@ -4,7 +4,6 @@ import (
 	"service/common/define/constant"
 
 	"github.com/grpc-boot/base"
-	clientv3 "go.etcd.io/etcd/client/v3"
 )
 
 // InitComponents 初始化组件
@@ -28,14 +27,6 @@ func InitComponents() {
 		err = SetEtcd(constant.ContEtcd, conf.Etcd.ToConfig())
 		if err != nil {
 			base.RedFatal("load %s err:%s", constant.ContEtcd, err.Error())
-		}
-	}
-
-	//加载etcd conf
-	if len(conf.EtcdConf.Prefix) > 0 {
-		err = SetEtcdConf(constant.ContEtcdConf, conf.EtcdConf, clientv3.WithPrefix())
-		if err != nil {
-			base.RedFatal("load %s err:%s", constant.ContEtcdConf, err.Error())
 		}
 	}
 

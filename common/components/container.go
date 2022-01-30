@@ -8,6 +8,7 @@ import (
 
 	"service/common/model"
 
+	"github.com/grpc-boot/base/core/shardmap"
 	"github.com/grpc-boot/betcd"
 	"github.com/grpc-boot/gateway"
 	"github.com/grpc-boot/gedis"
@@ -172,19 +173,20 @@ func GetEtcd(name string) (client *clientv3.Client, ok bool) {
 }
 
 // SetEtcdConf 加载EtcdConf
-func SetEtcdConf(name string, conf model.EtcdConf, options ...clientv3.OpOption) error {
+func SetEtcdConf(name string, conf model.EtcdConf, options ...clientv3.OpOption) (changeCh <-chan shardmap.ChangeEvent, err error) {
 	client, ok := GetEtcd(conf.Name)
 	if !ok {
-		return errors.New(fmt.Sprintf("没有找到name为%s的etcd服务", conf.Name))
+		return nil, errors.New(fmt.Sprintf("没有找到name为%s的etcd服务", conf.Name))
 	}
 
-	c, err := betcd.NewConfigWithClient(client, conf.Prefix, conf.KeyOption, options...)
+	var c betcd.Config
+	c, changeCh, err = betcd.NewConfigWithClient(client, conf.Option, options...)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	container.Store(name, c)
-	return nil
+	return changeCh, err
 }
 
 // GetEtcdConf 获取EtcdConf

@@ -1,64 +1,8 @@
 app:
-  name: 'gin-boot'
+  name: 'grpc-boot'
   addr: ':8080'
 
 log:
   level: -1
   errorPath: '/tmp/service-error.log'
   infoPath: '/tmp/service-info.log'
-
-db:
-  retryInterval: 60
-  masters:
-    - dsn: root:123456@tcp(127.0.0.1:3306)/dd?timeout=5s&readTimeout=6s
-      maxConnLifetime: 600
-      maxOpenConns: 50
-      maxIdleConns: 10
-  slaves:
-    - dsn: root:123456@tcp(127.0.0.1:3306)/dd?timeout=5s&readTimeout=6s
-      maxConnLifetime: 600
-      maxOpenConns: 50
-      maxIdleConns: 10
-
-    - dsn: root:123456@tcp(localhost:3307)/dd?timeout=5s&readTimeout=6s
-      maxConnLifetime: 600
-      maxOpenConns: 50
-      maxIdleConns: 10
-
-redis:
-  host: '127.0.0.1'
-  port: 6379
-  auth: ''
-  maxConnLifetime: 600
-  maxIdle: 10
-  maxActive: 20
-  connectTimeout: 300
-  readTimeout: 300
-  writeTimeout: 300
-
-etcd:
-  endpoints:
-    - '127.0.0.1:2379'
-  dialTimeout: 3
-  DialKeepAliveTime: 30
-  DialKeepAliveTimeout: 3
-
-etcdConf:
-  name: 'etcd'
-  prefix:
-    - 'browser/conf/app'
-  keyOption:
-    - key: 'browser/conf/app/limit'
-      type: 'json'
-    - key: 'browser/conf/app/redis'
-      type: 'yaml'
-
-etcdNaming:
-  name: 'etcd'
-  service: 'browser/services/app'
-
-var:
-  pageSize: 18
-  maxPage: 1000
-  rate: 0.134
-  defaultServer: '127.0.0.1'

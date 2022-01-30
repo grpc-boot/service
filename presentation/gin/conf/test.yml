@@ -39,20 +39,24 @@ redis:
 
 etcd:
   endpoints:
-    - '127.0.0.1:2379'
+    - '10.16.49.131:2379'
   dialTimeout: 3
   DialKeepAliveTime: 30
   DialKeepAliveTimeout: 3
 
 etcdConf:
   name: 'etcd'
-  prefix:
-    - 'browser/conf/app'
-  keyOption:
-    - key: 'browser/conf/app/limit'
-      type: 'json'
-    - key: 'browser/conf/app/redis'
-      type: 'yaml'
+  option:
+    prefixList:
+      - 'browser/conf/app'
+    keyOptionList:
+      - key: 'browser/conf/app/version'
+        type: 'string'
+      - key: 'browser/conf/app/limit'
+        type: 'json'
+      - key: 'browser/conf/app/redis'
+        type: 'yaml'
+    channelSize: 2048
 
 etcdNaming:
   name: 'etcd'
