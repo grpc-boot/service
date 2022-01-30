@@ -1,8 +1,8 @@
 package v1
 
 import (
-	"service/application"
-	"service/application/output"
+	"service/application/v1"
+	"service/application/v1/output"
 	"service/common/components"
 	"service/common/define/constant"
 	"service/common/model"
@@ -25,9 +25,9 @@ func Register(ctx *gin.Context) {
 	)
 
 	if phone != "" {
-		user, err = application.RegisterPhone(phone, "v1")
+		user, err = v1.RegisterPhone(phone)
 	} else if email != "" {
-		user, err = application.RegisterEmail(email, "v1")
+		user, err = v1.RegisterEmail(email)
 	}
 
 	if err != nil {
