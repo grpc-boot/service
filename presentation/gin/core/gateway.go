@@ -13,47 +13,45 @@ import (
 	"go.uber.org/zap"
 )
 
-// WithGateway 加载网关
-func WithGateway() gin.HandlerFunc {
-	return func(ctx *gin.Context) {
-		var (
-			accessTime = time.Now()
-			path       = ctx.FullPath()
-		)
+// Gateway 加载网关
+func Gateway(ctx *gin.Context) {
+	var (
+		accessTime = time.Now()
+		path       = ctx.FullPath()
+	)
 
-		//初始化ctx
-		ctx.Set(constant.CtxAccessTime, accessTime)
-		ctx.Set(constant.CtxRequestPath, path)
+	//初始化ctx
+	ctx.Set(constant.CtxAccessTime, accessTime)
+	ctx.Set(constant.CtxRequestPath, path)
 
-		//加载网关
-		gw, ok := components.GetGateway(constant.ContGateway)
-		if !ok {
-			ctx.Next()
-			return
-		}
-
-		status, _, _ := gw.InTimeout(time.Millisecond*100, path)
-		if status == gateway.StatusYes {
-			ctx.Next()
-			return
-		}
-
-		code := constant.ErrLimit
-		if status == gateway.StatusNo {
-			code = constant.ErrNotAvailable
-			ctx.JSON(http.StatusOK, components.Code2Response(constant.ErrNotAvailable))
-		} else {
-			ctx.JSON(http.StatusOK, components.Code2Response(constant.ErrLimit))
-		}
-
-		_, _, _, err := gw.Out(accessTime, path, code)
-		if err != nil {
-			base.ZapError("gateway out error",
-				zap.String(constant.ZapError, err.Error()),
-			)
-		}
-
-		ctx.Abort()
+	//加载网关
+	gw, ok := components.GetGateway(constant.ContGateway)
+	if !ok {
+		ctx.Next()
 		return
 	}
+
+	status, _ := gw.In(path)
+	if status == gateway.StatusYes {
+		ctx.Next()
+		return
+	}
+
+	code := constant.ErrLimit
+	if status == gateway.StatusNo {
+		code = constant.ErrNotAvailable
+		ctx.JSON(http.StatusOK, components.Code2Response(constant.ErrNotAvailable))
+	} else {
+		ctx.JSON(http.StatusOK, components.Code2Response(constant.ErrLimit))
+	}
+
+	_, _, _, err := gw.Out(accessTime, path, code)
+	if err != nil {
+		base.ZapError("gateway out error",
+			zap.String(constant.ZapError, err.Error()),
+		)
+	}
+
+	ctx.Abort()
+	return
 }

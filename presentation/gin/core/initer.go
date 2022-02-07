@@ -2,6 +2,7 @@ package core
 
 import (
 	"strconv"
+	"time"
 
 	"service/common/components"
 	"service/common/define/constant"
@@ -31,7 +32,7 @@ func Init() {
 	}
 
 	//加载网关
-	components.SetGateway(constant.ContGateway, 10, func() (options []gateway.Option) {
+	components.SetGateway(constant.ContGateway, time.Second, func() (options []gateway.Option) {
 		db, ok := components.GetDb(constant.ContDb)
 		if !ok {
 			base.Info("get db error")
@@ -56,10 +57,12 @@ func Init() {
 		options = make([]gateway.Option, len(rows))
 		for index, row := range rows {
 			limit, _ := strconv.Atoi(row["second_limit"])
+			bucketSize, _ := strconv.Atoi(row["bucket_size"])
 			options[index] = gateway.Option{
 				Name:        row["name"],
 				Path:        row["path"],
 				SecondLimit: limit,
+				BucketSize:  bucketSize,
 			}
 		}
 

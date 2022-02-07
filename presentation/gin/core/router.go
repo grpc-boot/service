@@ -18,7 +18,7 @@ func Route() *gin.Engine {
 
 func bind(router *gin.Engine) {
 	// 加载网关
-	router.Use(WithGateway())
+	router.Use(Gateway)
 
 	router.GET("/", v1.Index)
 

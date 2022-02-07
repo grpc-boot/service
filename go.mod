@@ -6,7 +6,7 @@ require (
 	github.com/gin-gonic/gin v1.7.7
 	github.com/grpc-boot/base v1.1.1
 	github.com/grpc-boot/betcd v0.0.3
-	github.com/grpc-boot/gateway v1.0.0
+	github.com/grpc-boot/gateway v1.0.4
 	github.com/grpc-boot/gedis v1.0.1
 	github.com/grpc-boot/orm v1.1.0
 	go.etcd.io/etcd/client/v3 v3.5.1
