@@ -3,6 +3,7 @@ package components
 import (
 	"errors"
 	"fmt"
+	"github.com/grpc-boot/base"
 	"sync"
 	"time"
 
@@ -88,6 +89,53 @@ func GetString(name string) (val string, ok bool) {
 	}
 	val, ok = value.(string)
 	return
+}
+
+// SetIdIp 存储基于ip的Id生成器
+func SetIdIp(name string, option model.SnowFlake) (err error) {
+	begin, _ := time.ParseInLocation("2006-01-02", option.Begin, time.Local)
+	sfl, er := base.NewSFByIp(option.Mode, begin.UnixNano()/1e6)
+	if er != nil {
+		return er
+	}
+
+	container.Store(name, sfl)
+	return nil
+}
+
+// SetId 存储ID生成器
+func SetId(name string, id uint8, option model.SnowFlake) (err error) {
+	begin, _ := time.ParseInLocation("2006-01-02", option.Begin, time.Local)
+	sfl, er := base.NewSF(option.Mode, id, begin.UnixNano()/1e6)
+	if er != nil {
+		return er
+	}
+
+	container.Store(name, sfl)
+	return nil
+}
+
+// GetId 获取Id生成器
+func GetId(name string) (id base.SnowFlake, ok bool) {
+	val, exists := container.Load(name)
+	if !exists {
+		return nil, exists
+	}
+
+	id, ok = val.(base.SnowFlake)
+	return
+}
+
+// CreateId 生成id
+func CreateId(name string, logicId uint8) (id int64) {
+	sfl, ok := GetId(name)
+	if !ok {
+		return
+	}
+
+	id, _ = sfl.Id(logicId)
+
+	return id
 }
 
 // SetRedis 加载Redis连接池

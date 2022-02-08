@@ -8,6 +8,7 @@ import (
 // Conf 配置
 type Conf struct {
 	App        App                    `json:"app" yaml:"app"`
+	Id         SnowFlake              `json:"id" yaml:"id"`
 	Log        Log                    `json:"log" yaml:"log"`
 	Db         orm.GroupOption        `json:"db" yaml:"db"`
 	Redis      gedis.Option           `json:"redis" yaml:"redis"`

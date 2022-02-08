@@ -4,6 +4,7 @@ package constant
 
 // 容器内置配置
 const (
+	ContId         = `id`
 	ContDb         = `db`
 	ContRedis      = `redis`
 	ContEtcd       = `etcd`

@@ -8,6 +8,10 @@ log:
   errorPath: '/tmp/fasthttp-error.log'
   infoPath: '/tmp/fasthttp-info.log'
 
+id:
+  mode: 1
+  begin: '2022-01-01'
+
 db:
   retryInterval: 60
   masters:

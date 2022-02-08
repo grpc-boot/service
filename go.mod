@@ -6,7 +6,7 @@ require (
 	github.com/gin-gonic/gin v1.7.7
 	github.com/go-ozzo/ozzo-routing v2.1.4+incompatible // indirect
 	github.com/golang/gddo v0.0.0-20210115222349-20d68f94ee1f // indirect
-	github.com/grpc-boot/base v1.1.1
+	github.com/grpc-boot/base v1.1.2
 	github.com/grpc-boot/betcd v0.0.3
 	github.com/grpc-boot/gateway v1.0.5
 	github.com/grpc-boot/gedis v1.0.1

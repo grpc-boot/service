@@ -5,4 +5,5 @@ package constant
 const (
 	CtxRequestPath = `ctx:request-path`
 	CtxAccessTime  = `ctx:access-time`
+	CtxTraceId     = `ctx:trace-id`
 )

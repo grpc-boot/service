@@ -102,7 +102,7 @@ func main() {
 	}()
 
 	//超时处理
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*5)
 	defer cancel()
 
 	select {

@@ -22,6 +22,9 @@ func Gateway(ctx *routing.Context) error {
 	)
 
 	//初始化ctx
+	id, _ := components.GetId(constant.ContId)
+	traceId, _ := id.IdTime(accessTime, 0)
+	ctx.SetUserValue(constant.CtxTraceId, traceId)
 	ctx.SetUserValue(constant.CtxAccessTime, accessTime)
 	ctx.SetUserValue(constant.CtxRequestPath, path)
 
@@ -32,6 +35,7 @@ func Gateway(ctx *routing.Context) error {
 		if err != nil {
 			base.ZapError("handler error",
 				zap.String(constant.ZapError, err.Error()),
+				zap.Int64(constant.ZapTraceId, traceId),
 			)
 		}
 
@@ -44,6 +48,7 @@ func Gateway(ctx *routing.Context) error {
 		if err != nil {
 			base.ZapError("handler error",
 				zap.String(constant.ZapError, err.Error()),
+				zap.Int64(constant.ZapTraceId, traceId),
 			)
 		}
 
@@ -61,6 +66,7 @@ func Gateway(ctx *routing.Context) error {
 	if err != nil {
 		base.ZapError("write error",
 			zap.String(constant.ZapError, err.Error()),
+			zap.Int64(constant.ZapTraceId, traceId),
 		)
 	}
 
@@ -68,6 +74,7 @@ func Gateway(ctx *routing.Context) error {
 	if err != nil {
 		base.ZapError("gateway out error",
 			zap.String(constant.ZapError, err.Error()),
+			zap.Int64(constant.ZapTraceId, traceId),
 		)
 	}
 
