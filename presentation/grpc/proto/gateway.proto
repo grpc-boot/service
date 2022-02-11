@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+
+option go_package = "pb/";
+
+package pb;
+
+service Gateway {
+  rpc Gw (google.protobuf.Empty) returns (GwReply) {}
+}
+
+message GwReply {
+  int32 code = 1;
+  string msg = 2;
+  GwInfo data = 3;
+}
+
+message GwInfo {
+  int32 qps = 1;
+  uint64 total = 2;
+  repeated MethodInfo method_list = 3;
+}
+
+message MethodInfo {
+  string name = 1;
+  string path = 2;
+  int32 second_limit = 3;
+  int32 qps = 4;
+  uint64 total = 5;
+  string avg = 6;
+  string min = 7;
+  string max = 8;
+  string line_90 = 9;
+  string line_95 = 10;
+  map<int32, uint64> code_map = 11;
+}

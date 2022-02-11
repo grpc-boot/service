@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+
+option go_package = "pb/";
+
+package pb;
+
+service Index {
+  rpc Index (google.protobuf.Empty) returns (IndexReply) {}
+}
+
+message IndexReply {
+  int32 code = 1;
+  string msg = 2;
+  google.protobuf.Empty data = 3;
+}

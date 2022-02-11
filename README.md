@@ -78,23 +78,15 @@ CREATE TABLE `user` (
 ./service-gin 
 ```
 
-> 1.下载protoc
+### grpc
 
-[https://github.com/protocolbuffers/protobuf/releases/](https://github.com/protocolbuffers/protobuf/releases/)
+> [quickstart](https://www.grpc.io/docs/languages/go/quickstart/)
 
-> 2.安装`google.golang.org/protobuf`
+> [proto3](https://developers.google.com/protocol-buffers/docs/proto3)
 
-```bash
-go install google.golang.org/protobuf/cmd/protoc-gen-go
-go install google.golang.org/grpc/cmd/protoc-gen-go-grpc
+> [下载protoc](https://github.com/protocolbuffers/protobuf/releases/)
 
-go mod edit -replace=google.golang.org/grpc=github.com/grpc/grpc-go@latest
-go mod tidy
+```shell
+protoc --go_out=. ./proto/*.proto
 ```
-
-> 3.生成代码
-```bash
-protoc --go_out=. --go_opt=paths=import --go-grpc_out=. --go-grpc_opt=paths=import proto/*.proto
-```
-
 
