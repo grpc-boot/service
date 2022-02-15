@@ -5,8 +5,8 @@ app:
 
 log:
   level: -1
-  errorPath: '/tmp/service-error.log'
-  infoPath: '/tmp/service-info.log'
+  errorPath: '/tmp/gin-error.log'
+  infoPath: '/tmp/gin-info.log'
 
 id:
   mode: 1
@@ -40,31 +40,6 @@ redis:
   connectTimeout: 300
   readTimeout: 300
   writeTimeout: 300
-
-etcd:
-  endpoints:
-    - '127.0.0.1:2379'
-  dialTimeout: 3
-  DialKeepAliveTime: 30
-  DialKeepAliveTimeout: 3
-
-etcdConf:
-  name: 'etcd'
-  option:
-    prefixList:
-      - 'browser/conf/app'
-    keyOptionList:
-      - key: 'browser/conf/app/version'
-        type: 'string'
-      - key: 'browser/conf/app/limit'
-        type: 'json'
-      - key: 'browser/conf/app/redis'
-        type: 'yaml'
-    channelSize: 2048
-
-etcdNaming:
-  name: 'etcd'
-  service: 'browser/services/app'
 
 var:
   pageSize: 18

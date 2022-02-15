@@ -1,6 +1,8 @@
 package components
 
 import (
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 	"sync"
 
 	"service/common/define/constant"
@@ -9,12 +11,13 @@ import (
 	"github.com/grpc-boot/base"
 )
 
-var errorMap = map[int32]string{
-	constant.Success:         "操作成功",
-	constant.ErrInner:        "出现了点小状况，请稍后再试",
-	constant.ErrParam:        "参数错误",
-	constant.ErrLimit:        "请求过于频繁，请稍候重试",
-	constant.ErrNotAvailable: "服务暂时不可用，请稍候重试",
+var errorMap = map[uint32]string{
+	constant.Success:            "操作成功",
+	constant.ErrInner:           "出现了点小状况，请稍后再试",
+	constant.ErrParam:           "参数错误",
+	constant.ErrLimit:           "请求过于频繁，请稍候重试",
+	constant.ErrNotAvailable:    "服务暂时不可用，请稍候重试",
+	constant.ErrUnauthenticated: "未认证请求",
 
 	constant.ErrGatewayNotExists: "网关不存在",
 	constant.ErrGatewayTimeout:   "请求超时",
@@ -30,7 +33,7 @@ var errPool = sync.Pool{
 }
 
 // NewError 实例化错误对象
-func NewError(code int32, msg string) *Error {
+func NewError(code uint32, msg string) *Error {
 	e := errPool.Get().(*Error)
 	e.code = code
 	e.msg = msg
@@ -38,13 +41,13 @@ func NewError(code int32, msg string) *Error {
 }
 
 // NewErrorWithCode with code实例化错误对象
-func NewErrorWithCode(code int32) *Error {
+func NewErrorWithCode(code uint32) *Error {
 	msg, _ := errorMap[code]
 	return NewError(code, msg)
 }
 
 // Code2Response 状态码转换为response
-func Code2Response(code int32) model.Response {
+func Code2Response(code uint32) model.Response {
 	msg, _ := errorMap[code]
 	return model.Response{
 		Code: code,
@@ -53,9 +56,15 @@ func Code2Response(code int32) model.Response {
 	}
 }
 
+// Code2Error 状态码转为status
+func Code2Error(code uint32) error {
+	msg, _ := errorMap[code]
+	return status.Errorf(codes.Code(code), msg)
+}
+
 // Error 通用错误对象
 type Error struct {
-	code int32
+	code uint32
 	msg  string
 }
 
@@ -65,7 +74,7 @@ func (e *Error) Error() string {
 }
 
 // Code 获取错误码
-func (e *Error) Code() int32 {
+func (e *Error) Code() uint32 {
 	return e.code
 }
 

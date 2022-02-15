@@ -2,6 +2,7 @@ package v1
 
 import (
 	"context"
+
 	"service/common/define/constant"
 	"service/presentation/grpc/pb"
 
@@ -14,6 +15,8 @@ type index struct {
 }
 
 func (i *index) Index(ctx context.Context, in *emptypb.Empty) (*pb.IndexReply, error) {
+	gateway(ctx, nil, int(constant.Success))
+
 	return &pb.IndexReply{
 		Code: constant.Success,
 		Msg:  "Hello World!",

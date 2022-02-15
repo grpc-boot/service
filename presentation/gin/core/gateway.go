@@ -48,7 +48,7 @@ func Gateway(ctx *gin.Context) {
 		ctx.JSON(http.StatusOK, components.Code2Response(constant.ErrLimit))
 	}
 
-	_, _, _, err := gw.Out(accessTime, path, code)
+	_, _, _, err := gw.Out(accessTime, path, int(code))
 	if err != nil {
 		base.ZapError("gateway out error",
 			zap.String(constant.ZapError, err.Error()),
