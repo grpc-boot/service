@@ -14,4 +14,5 @@ func Route(server *grpc.Server) {
 
 func bind(server *grpc.Server) {
 	v1.RegisterIndex(server)
+	v1.RegisterGateway(server)
 }

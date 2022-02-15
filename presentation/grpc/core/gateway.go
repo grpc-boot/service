@@ -27,7 +27,7 @@ func Gateway(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, h
 
 	md, _ := metadata.FromIncomingContext(ctx)
 	md.Set(constant.CtxTraceId, strconv.FormatInt(traceId, 10))
-	md.Set(constant.CtxAccessTime, accessTime.String())
+	md.Set(constant.CtxAccessTime, accessTime.Format(constant.NanoFormat))
 	md.Set(constant.CtxRequestPath, path)
 
 	//加载网关

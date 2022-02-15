@@ -11,7 +11,7 @@ import (
 	"github.com/grpc-boot/base"
 )
 
-var errorMap = map[uint32]string{
+var errorMap = map[int32]string{
 	constant.Success:            "操作成功",
 	constant.ErrInner:           "出现了点小状况，请稍后再试",
 	constant.ErrParam:           "参数错误",
@@ -33,7 +33,7 @@ var errPool = sync.Pool{
 }
 
 // NewError 实例化错误对象
-func NewError(code uint32, msg string) *Error {
+func NewError(code int32, msg string) *Error {
 	e := errPool.Get().(*Error)
 	e.code = code
 	e.msg = msg
@@ -41,13 +41,13 @@ func NewError(code uint32, msg string) *Error {
 }
 
 // NewErrorWithCode with code实例化错误对象
-func NewErrorWithCode(code uint32) *Error {
+func NewErrorWithCode(code int32) *Error {
 	msg, _ := errorMap[code]
 	return NewError(code, msg)
 }
 
 // Code2Response 状态码转换为response
-func Code2Response(code uint32) model.Response {
+func Code2Response(code int32) model.Response {
 	msg, _ := errorMap[code]
 	return model.Response{
 		Code: code,
@@ -57,14 +57,14 @@ func Code2Response(code uint32) model.Response {
 }
 
 // Code2Error 状态码转为status
-func Code2Error(code uint32) error {
+func Code2Error(code int32) error {
 	msg, _ := errorMap[code]
 	return status.Errorf(codes.Code(code), msg)
 }
 
 // Error 通用错误对象
 type Error struct {
-	code uint32
+	code int32
 	msg  string
 }
 
@@ -74,7 +74,7 @@ func (e *Error) Error() string {
 }
 
 // Code 获取错误码
-func (e *Error) Code() uint32 {
+func (e *Error) Code() int32 {
 	return e.code
 }
 

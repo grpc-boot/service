@@ -12,7 +12,7 @@ import (
 	"google.golang.org/grpc/metadata"
 )
 
-func gateway(ctx context.Context, data interface{}, code int) {
+func gateway(ctx context.Context, data interface{}, code int32) {
 	gw, ok := components.GetGateway(constant.ContGateway)
 	if ok {
 		md, _ := metadata.FromIncomingContext(ctx)
@@ -20,9 +20,8 @@ func gateway(ctx context.Context, data interface{}, code int) {
 		at := md.Get(constant.CtxAccessTime)
 		path := md.Get(constant.CtxRequestPath)
 
-		accessTime, _ := time.Parse("2006-01-02 15:04:05.999999999 -0700 MST", at[0])
-
-		_, _, _, err := gw.Out(accessTime, path[0], code)
+		accessTime, _ := time.ParseInLocation(constant.NanoFormat, at[0], time.Local)
+		_, _, _, err := gw.Out(accessTime, path[0], int(code))
 
 		if err != nil {
 			base.ZapError("gateway out error",

@@ -63,3 +63,9 @@ func (c *Conf) StringVar(key string) (val string, ok bool) {
 	val, ok = value.(string)
 	return
 }
+
+// Build 配置初始化
+func (c *Conf) Build() {
+	c.App.Build()
+	c.Id.Build()
+}

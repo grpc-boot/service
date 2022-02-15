@@ -1,17 +1,13 @@
 package components
 
 import (
-	"service/common/define/constant"
-
 	"github.com/grpc-boot/base"
+	"service/common/define/constant"
 )
 
 // InitComponents 初始化组件
 func InitComponents() {
 	var err error
-
-	//初始化id配置
-	conf.Id.Build()
 
 	//加载id生成器
 	err = SetIdIp(constant.ContId, conf.Id)

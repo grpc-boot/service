@@ -6,22 +6,22 @@ import "google.golang.org/grpc/codes"
 
 // 通用错误
 const (
-	Success            = 0
-	ErrInner           = uint32(codes.Internal)
-	ErrParam           = uint32(codes.InvalidArgument)
-	ErrLimit           = uint32(codes.PermissionDenied)
-	ErrNotAvailable    = uint32(codes.Unavailable)
-	ErrUnauthenticated = uint32(codes.Unauthenticated)
+	Success            = int32(0)
+	ErrInner           = int32(codes.Internal)
+	ErrParam           = int32(codes.InvalidArgument)
+	ErrLimit           = int32(codes.PermissionDenied)
+	ErrNotAvailable    = int32(codes.Unavailable)
+	ErrUnauthenticated = int32(codes.Unauthenticated)
 )
 
 // 网关模块
 const (
-	ErrGatewayNotExists = 10001
-	ErrGatewayTimeout   = 10002
+	ErrGatewayNotExists int32 = 10001
+	ErrGatewayTimeout   int32 = 10002
 )
 
 // 用户模块
 const (
-	ErrPhoneExists = 20001
-	ErrEmailExists = 20002
+	ErrPhoneExists int32 = 20001
+	ErrEmailExists int32 = 20002
 )

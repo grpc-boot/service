@@ -54,12 +54,20 @@ func InitConf(filename string) error {
 
 	switch kind {
 	case ".yml", ".yaml":
-		return base.YamlDecodeFile(filename, &conf)
+		if err := base.YamlDecodeFile(filename, &conf); err != nil {
+			return err
+		}
 	case ".json":
-		return base.JsonDecodeFile(filename, &conf)
+		if err := base.JsonDecodeFile(filename, &conf); err != nil {
+			return err
+		}
+	default:
+		return errors.New("仅支持扩展名为[.yml,.yaml,.json]的配置文件")
 	}
 
-	return errors.New("仅支持扩展名为[.yml,.yaml,.json]的配置文件")
+	conf.Build()
+
+	return nil
 }
 
 // InitConfWithFlag with flag初始化配置

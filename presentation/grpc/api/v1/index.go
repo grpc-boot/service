@@ -15,12 +15,13 @@ type index struct {
 }
 
 func (i *index) Index(ctx context.Context, in *emptypb.Empty) (*pb.IndexReply, error) {
-	gateway(ctx, nil, int(constant.Success))
-
-	return &pb.IndexReply{
+	data := &pb.IndexReply{
 		Code: constant.Success,
 		Msg:  "Hello World!",
-	}, nil
+	}
+
+	gateway(ctx, data, constant.Success)
+	return data, nil
 }
 
 func RegisterIndex(server *grpc.Server) {
