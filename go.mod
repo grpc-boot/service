@@ -7,7 +7,7 @@ require (
 	github.com/go-ozzo/ozzo-routing v2.1.4+incompatible // indirect
 	github.com/golang/gddo v0.0.0-20210115222349-20d68f94ee1f // indirect
 	github.com/grpc-boot/base v1.1.2
-	github.com/grpc-boot/betcd v0.0.3
+	github.com/grpc-boot/betcd v0.0.4
 	github.com/grpc-boot/gateway v1.0.5
 	github.com/grpc-boot/gedis v1.0.1
 	github.com/grpc-boot/orm v1.1.0
@@ -18,5 +18,3 @@ require (
 	google.golang.org/grpc v1.44.0
 	google.golang.org/protobuf v1.27.1
 )
-
-replace google.golang.org/grpc => github.com/grpc/grpc-go v1.37.0

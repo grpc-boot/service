@@ -3,11 +3,10 @@ package v1
 import (
 	"sync"
 
+	"service/common/components"
 	"service/common/define/constant"
 	"service/dal/db"
 	"service/dal/entity"
-
-	"service/common/components"
 )
 
 var userPool = sync.Pool{
